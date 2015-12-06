@@ -20,10 +20,15 @@
   <!-- navbar -->
   {% include "base-navbar.html" %}
 
+  <!-- authentication modal -->
+  {% include "base-socialAuthModal.html" %}
+
   <!-- main content -->
   <div class="container">
     {% block body_block %}{% endblock %}
   </div>
+
+
 
   </body>
 </html>

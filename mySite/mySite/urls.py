@@ -14,10 +14,12 @@ Including another URLconf
     2. Import the include() function: from django.conf.urls import url, include
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^$', 'home.views.index'),
     url(r'^admin/', admin.site.urls),
+    url('^', include('django.contrib.auth.urls')), # for description, see: https://docs.djangoproject.com/en/1.8/topics/auth/default/#using-the-views for description of django.contrib.auth.urls
+    url('', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^$', include('home.urls', namespace='home')),
 ]
