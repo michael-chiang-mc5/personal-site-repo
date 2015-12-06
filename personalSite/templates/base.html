@@ -1,0 +1,29 @@
+<!-- This file contains the base django template used for all webpages -->
+<!-- use with: extends "base.html"  -->
+
+<html>
+  <head>
+    {% load staticfiles %}
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.5-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.5-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block javascript %}{% endblock %}
+  </head>
+
+  <body>
+
+  <!-- navbar -->
+  {% include "base-navbar.html" %}
+
+  <!-- main content -->
+  <div class="container">
+    {% block body_block %}{% endblock %}
+  </div>
+
+  </body>
+</html>
