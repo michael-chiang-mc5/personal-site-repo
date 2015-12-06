@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('^', include('django.contrib.auth.urls')), # for description, see: https://docs.djangoproject.com/en/1.8/topics/auth/default/#using-the-views for description of django.contrib.auth.urls
     url('', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^$', include('home.urls', namespace='home')),
+    url('', include('home.urls', namespace='home')),
 ]
