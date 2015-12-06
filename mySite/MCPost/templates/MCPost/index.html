@@ -1,0 +1,45 @@
+<body>
+  <h1>This demonstrates the functionality of the Post app</h1>
+
+  <div>
+
+    <div>
+      <h2>Use this form to submit a post
+      <form action="{% url 'MCPost:createPost' %}" method=POST>
+        {% csrf_token %}
+        <input type="text" name="post-text">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <hr />
+
+    <div>
+      <h2>Here are posts in database</h2>
+      {% for post in posts %}
+        {{ forloop.counter }}.
+        pk={{ post.pk}} , {{ post.get_most_recent_text }}, mother={{ post.mother.pk }}
+
+        <!-- edit button -->
+        <form action="{% url 'MCPost:editPost' %}" method=POST>
+          {% csrf_token %}
+          <input type="text" name="post-text">
+          <input type="hidden" name="post-pk" value="{{ post.pk }}" />
+          <input type="submit" value="Edit">
+        </form>
+
+        <!-- reply button -->
+        <form action="{% url 'MCPost:replyPost' %}" method=POST>
+          {% csrf_token %}
+          <input type="text" name="post-text">
+          <input type="hidden" name="mother-pk" value="{{ post.pk }}" />
+          <input type="submit" value="Reply">
+        </form>
+
+        <br />
+      {% endfor %}
+    </div>
+
+
+  </div>
+
+</body>
