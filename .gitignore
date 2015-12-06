@@ -2,5 +2,6 @@
 .DS_Store
 *.sqlite3
 venv/
-mySite/home/migrations/
+*/migrations/*
+*/migrations/*
 secret_keys_and_passwords.py
