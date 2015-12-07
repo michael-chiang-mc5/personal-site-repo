@@ -4,7 +4,8 @@
      Options:
        citation_is_not_saved: set True if citation object is not saved and therefore has no pk
 -->
-
+{% load staticfiles %}
+<script src="{% static 'MCCitation/js/pubmedCitation_template.js' %}"></script>
 <div>
   {% if citation_is_not_saved %}
     <a id="citation-toggle-{{ forloop.counter }}" class="list-group-item pointer" data-toggle="collapse" data-target="#citation-item-{{ forloop.counter }}" data-parent="#menu"> <!-- TODO: color this (active?) -->
