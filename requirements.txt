@@ -2,6 +2,7 @@ defusedxml==0.4.1
 Django==1.9
 oauthlib==1.0.3
 PyJWT==1.4.0
+pymongo==3.1.1
 python-social-auth==0.2.13
 python3-openid==3.0.9
 requests==2.8.1
