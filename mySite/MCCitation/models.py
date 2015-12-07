@@ -1,4 +1,5 @@
 from django.db import models
+import ast
 
 
 # Citation data from pubmed
@@ -109,7 +110,6 @@ class MCPubmedCitation(models.Model):
             return pk
         else:
             self.save()
-            self.create_associated_threads_posts()
             return self.pk
 
     # Serializes internal data into a string

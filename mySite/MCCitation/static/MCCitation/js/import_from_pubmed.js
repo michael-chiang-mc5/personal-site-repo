@@ -41,7 +41,7 @@ $(document).ready(function() {
     // Execute search
     $.getJSON(pubmed_search_link, function(data){
       // display loading bar and freeze screen
-      $("body").addClass("loading");      
+      $("body").addClass("loading");
       // Get pubmed ids of search results
       var ids = data.esearchresult.idlist;
       var count = data.esearchresult.count;
@@ -57,9 +57,25 @@ $(document).ready(function() {
         $("#pubmed-search-form").submit()
       });
     });
-
   });
 
-
+  // import button functionality
+  $(".import-citation").click(function() {
+    var b = $( this )
+    var f = b.next('form');
+    var url = f.attr( 'action' );
+    if ( b.hasClass('import-citation')) { // this is required because click doesn't detect changes to class
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: f.serialize(),
+        success: function(data) {
+          b.removeClass('import-citation')
+          b.parent().attr("href",data)
+          b.html("Click to discuss this paper!")
+        }
+      });
+    }
+  });
 
 });

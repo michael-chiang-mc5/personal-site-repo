@@ -3,13 +3,22 @@ from .models import *
 import json
 from django.http import HttpResponse
 import math
+from django.core.urlresolvers import reverse
 
 def index(request):
-    return HttpResponse("success")
+    citations = MCPubmedCitation.objects.all()
+    context = {'citations':citations}
+    return render(request, 'MCCitation/index.html', context)
 
 def addCitation(request):
-    pass
-    
+    citation_serialized = request.POST['citation_serialized']
+    citation = MCPubmedCitation()
+    citation.deserialize(citation_serialized)
+    citation_pk = citation.save_if_unique()
+    # Return url to new citation detail page
+    new_citation_url = reverse('MCCitation:detail',args=[citation_pk,0])
+    return HttpResponse(new_citation_url)
+
 def import_from_pubmed(request,page):
     # hard-coded parameters
     results_per_page = 10

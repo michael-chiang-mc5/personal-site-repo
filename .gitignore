@@ -4,4 +4,5 @@
 venv/
 mySite/MCHome/migrations/
 mySite/MCPost/migrations/
+mySite/MCCitation/migrations/
 secret_keys_and_passwords.py

@@ -31,7 +31,7 @@
       {% else %}
         <!-- import citations into JCDB. Form submission handled by javascript in MCCitation/import_from_pubmed.js -->
         <a class="list-group-item">
-          <button type="button" class="btn btn-primary btn-xs import-button">Import to JCDB</button>
+          <button type="button" class="btn btn-primary btn-xs import-citation">Import to JCDB</button>
           <form action="{% url 'MCCitation:addCitation' %}" method=POST class="inline">
             {% csrf_token %}
             <input type="hidden" name="citation_serialized" value="{{ citation.serialize }}" />
