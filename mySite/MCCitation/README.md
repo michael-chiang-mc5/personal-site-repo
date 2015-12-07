@@ -3,4 +3,4 @@ Pubmed.
 
 This app requires:
 MCBase
-MCDiscusscitation
+MCDiscussCitation

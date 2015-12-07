@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'MCHome',
     'MCPost',
     'MCCitation',
+    'MCDiscussCitation',
     'MCBase',
 ]
 

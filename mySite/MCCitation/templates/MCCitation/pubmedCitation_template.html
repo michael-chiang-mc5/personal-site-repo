@@ -17,7 +17,7 @@
     {% if citation_is_not_saved %} <!-- i.e., if we are looking at pubmed import results -->
       {% if citation.preExistingCitationExists %}
         <!-- link to pre-existing citation detail -->
-        <a class="list-group-item" href="{% url 'MCCitation:detail' citation.preExistingCitationPk 0 %}">
+        <a class="list-group-item" href="{% url 'MCDiscussCitation:detail' citation.preExistingCitationPk 0 %}">
           <button type="button" class="btn btn-primary btn-xs">Discuss in JCDB</button>
         </a>
       {% else %}
@@ -32,7 +32,7 @@
       {% endif %}
     {% else %}
       <!-- link to citation detail-->
-      <a class="list-group-item" href="{% url 'MCCitation:detail' citation.pk  0 %}">
+      <a class="list-group-item" href="{% url 'MCDiscussCitation:detail' citation.pk  0 %}">
         <button type="button" class="btn btn-primary btn-xs">Click to discuss this paper!</button>
       </a>
     {% endif %}

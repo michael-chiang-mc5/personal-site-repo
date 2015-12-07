@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 import datetime
 from bson import json_util
 
+class MCThread(models.Model):
+    post = models.ForeignKey(MCPost)
+    order = models.PositiveIntegerField(blank=True, null=True)
+    name = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
 class MCPost(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, blank=True, null=True)

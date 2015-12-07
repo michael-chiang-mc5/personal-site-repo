@@ -16,7 +16,7 @@ def addCitation(request):
     citation.deserialize(citation_serialized)
     citation_pk = citation.save_if_unique()
     # Return url to new citation detail page
-    new_citation_url = reverse('MCCitation:detail',args=[citation_pk,0])
+    new_citation_url = reverse('MCDiscussCitation:detail',args=[citation_pk,0])
     return HttpResponse(new_citation_url)
 
 def import_from_pubmed(request,page):
@@ -76,6 +76,3 @@ def deserialize_json_string(json_str):
             citation.parse_pubmedJson(articles_json)
             citations.append(citation)
     return citations
-
-def detail(request,pk,current_thread):
-    return HttpResponse("success")
