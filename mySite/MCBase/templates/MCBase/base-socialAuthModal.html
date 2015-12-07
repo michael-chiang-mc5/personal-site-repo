@@ -1,6 +1,6 @@
 <!-- this file should be included in template base.html -->
 {% load staticfiles %}
-<link rel="stylesheet" href="{% static 'css/base-socialAuthModal.css' %}">
+<link rel="stylesheet" href="{% static 'MCBase/css/base-socialAuthModal.css' %}">
 
 <div id="social-auth-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -15,15 +15,15 @@
         <!-- login with social media -->
         <div class="row center-text">
           <a class="socialAuthModal-link" href="{% url 'social:begin' backend='google-oauth2' %}?next={{ request.get_full_path }}">
-            <img height="150" src="{% static 'images/google-icon.png'%}" alt="Log in with google!">
+            <img height="150" src="{% static 'MCBase/images/google-icon.png'%}" alt="Log in with google!">
           </a>
 
           <a class="socialAuthModal-link" href="{% url 'social:begin' backend='facebook' %}?next={{ request.get_full_path }}">
-            <img height="150" src="{% static 'images/facebook-icon.png'%}" alt="Log in with facebook!">
+            <img height="150" src="{% static 'MCBase/images/facebook-icon.png'%}" alt="Log in with facebook!">
           </a>
 
           <a class="socialAuthModal-link" href="{% url 'social:begin' backend='twitter' %}?next={{ request.get_full_path }}">
-            <img height="150" src="{% static 'images/twitter-icon.png'%}" alt="Log in with twitter!">
+            <img height="150" src="{% static 'MCBase/images/twitter-icon.png'%}" alt="Log in with twitter!">
           </a>
         </div>
 

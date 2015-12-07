@@ -7,5 +7,4 @@ urlpatterns = [
     url(r'^createPost/$', views.createPost, name='createPost'),
     url(r'^editPost/$', views.editPost, name='editPost'),
     url(r'^replyPost/$', views.replyPost, name='replyPost'),    
-
 ]

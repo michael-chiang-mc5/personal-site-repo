@@ -1,0 +1,47 @@
+<!-- this template contains html to display a single citation -->
+<!-- requires template variables:
+       citation: MCPubmedCitation object
+     Options:
+       citation_is_not_saved: set True if citation object is not saved and therefore has no pk
+-->
+
+<div>
+  {% if citation_is_not_saved %}
+    <a id="citation-toggle-{{ forloop.counter }}" class="list-group-item pointer" data-toggle="collapse" data-target="#citation-item-{{ forloop.counter }}" data-parent="#menu"> <!-- TODO: color this (active?) -->
+  {% else %}
+    <a id="citation-toggle-{{ citation.pk }}" class="list-group-item pointer" data-toggle="collapse" data-target="#citation-item-{{ citation.pk }}" data-parent="#menu"> <!-- TODO: color this (active?) -->
+  {% endif %}
+    <h4 class="list-group-item-heading">{{ citation.title }}</h4>
+    <p class="list-group-item-text">{{ citation.get_author_list_truncated }} ({{ citation.get_year_published }}). {{ citation.get_journal }}.</p>
+  </a>
+
+  {% if citation_is_not_saved %}
+    <div id="citation-item-{{ forloop.counter }}" class="citation-index-all sublinks collapse {% if forloop.counter == 1 %}in{% endif %}"> <!-- start with first entry not collapsed -->
+  {% else %}
+    <div id="citation-item-{{ citation.pk }}" class="citation-index-all sublinks collapse {% if forloop.counter == 1 %}in{% endif %}"> <!-- start with first entry not collapsed -->
+  {% endif %}
+  <a class="list-group-item small">{{ citation.abstract }}</a>
+  {% if citation_is_not_saved %}
+      {% if citation.preExistingCitationExists %}
+        <!-- link to pre-existing citation detail -->
+        <a class="list-group-item" href="{% url 'MCCitation:detail' citation.preExistingCitationPk 0 %}">
+          <button type="button" class="btn btn-primary btn-xs">Discuss in JCDB</button>
+        </a>
+      {% else %}
+        <!-- import citations into JCDB. Form submission handled by javascript in MCJournalclub/import_from_pubmed.js -->
+        <a class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs import-button">Import to JCDB</button>
+          <form action="{% url 'MCCitation:addCitation' %}" method=POST class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="citation_serialized" value="{{ citation.serialize }}" />
+          </form>
+        </a>
+      {% endif %}
+  {% else %}
+    <!-- link to citation detail-->
+    <a class="list-group-item" href="{% url 'MCCitation:detail' citation.pk  0 %}">
+      <button type="button" class="btn btn-primary btn-xs">Click to discuss this paper!</button>
+    </a>
+  {% endif %}
+  </div>
+</div>

@@ -1,0 +1,87 @@
+{% extends "MCBase/base.html" %}
+{% load MCBase_templatetags %}
+
+{% block javascript %}
+  {% load staticfiles %}
+  <script>max_results_per_page = {{ results_per_page }}</script>
+  <script src="{% static 'MCJournalclub/js/xml2json.js' %}"></script> <!-- must be called before search.js -->
+  <script src="{% static 'MCJournalclub/js/import_from_pubmed.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'MCJournalclub/css/import_from_pubmed.css' %}">
+{% endblock %}
+
+
+{% block body_block %}
+
+  <div class="container">
+
+    <!-- search bar -->
+    <div class="row">
+      <div id="custom-search-input">
+        <div class="input-group col-md-12">
+          <div id="custom-search-input">
+            <div class="input-group col-md-12">
+              <input type="text" class="search-query form-control search-pubmed-text-input" placeholder="{{ search_bar_placeholder }}" />
+              <span class="input-group-btn">
+                <button class="btn btn-danger" type="button">
+                  <span class=" glyphicon glyphicon-search"></span>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if not is_fresh_search %}
+      {% if citations|length == 0 %} <!-- user searched for results but nothing popped up -->
+        <br />
+        <hr class="grey" />
+        <h2 class="color-white">No articles found</h2>
+      {% else %}
+        <br />
+        <hr class="grey" />
+        {% for citation in citations %}
+          <br />
+          <div class="row">
+            {% include "MCCitation/pubmedCitation_template.html" %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+
+    <!-- pagination -->
+    <div class="text-center">
+      <ul class="pagination">
+        {% for i in total_pages|get_range %}
+          {% if i|increment == current_page|add:"0" %} <!-- add:"0" to cast string to int -->
+            <li class="active"><a>{{ i|increment }}</a></li>
+          {% else %}
+            <li>
+              <a class="page cursor-pointer">{{ i|increment }}</a>
+              <input type="hidden" name="number" value="{{ i|increment }}" class="inline" />
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- hidden form  -->
+  <form method="POST" id="pubmed-search-form">
+    {% csrf_token %}
+    <input type="hidden" id="pubmed-return-json-str" name="pubmed_return_json_str" value="" />
+    <input type="hidden" id="pubmed-return-num-results" name="pubmed_return_num_results" value="" />
+    <input type="hidden" id="goto-page" name="goto_page" value="" />
+    <input type="hidden" id="search-bar-placeholder" name="search_bar_placeholder" value="{{ search_bar_placeholder }}" />
+  </form>
+
+
+  <!-- this is the loader gif that displays when search is run
+       see: http://stackoverflow.com/questions/1964839/how-can-i-create-a-please-wait-loading-animation-using-jquery -->
+  <div class="loading-bar-modal"></div>
+
+
+
+
+{% endblock %}

@@ -1,6 +1,6 @@
 <!-- this file should be included in template base.html -->
 {% load staticfiles %}
-<link rel="stylesheet" href="{% static 'css/base-navbar.css' %}">
+<link rel="stylesheet" href="{% static 'MCBase/css/base-navbar.css' %}">
 
 <nav class="navbar navbar-default navbar-static-top"> <!-- for example navbars, see: https://getbootstrap.com/examples/navbar-fixed-top/ -->
   <div class="container">
@@ -13,7 +13,7 @@
       <!-- left-side navbar -->
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li {% if navbar_home %}class="active"{% endif %}><a href="#">Home</a></li>
+          <li {% if home %}class="active"{% endif %}><a href="#">Home</a></li>
         </ul>
 
         <!-- right-side navbar -->

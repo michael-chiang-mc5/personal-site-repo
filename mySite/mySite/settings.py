@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+#
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,8 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
-    'home',
+    'MCJournalclub',
+    'MCHome',
     'MCPost',
+    'MCCitation',
+    'MCBase',
 ]
 
 AUTHENTICATION_BACKENDS = (
