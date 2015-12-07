@@ -7,22 +7,14 @@
 {% load staticfiles %}
 <script src="{% static 'MCCitation/js/pubmedCitation_template.js' %}"></script>
 <div>
-  {% if citation_is_not_saved %}
-    <a id="citation-toggle-{{ forloop.counter }}" class="list-group-item pointer" data-toggle="collapse" data-target="#citation-item-{{ forloop.counter }}" data-parent="#menu"> <!-- TODO: color this (active?) -->
-  {% else %}
-    <a id="citation-toggle-{{ citation.pk }}" class="list-group-item pointer" data-toggle="collapse" data-target="#citation-item-{{ citation.pk }}" data-parent="#menu"> <!-- TODO: color this (active?) -->
-  {% endif %}
+  <a id="citation-toggle-{{ forloop.counter }}" class="list-group-item cursor-pointer" data-toggle="collapse" data-target="#citation-item-{{ forloop.counter }}" data-parent="#menu"> <!-- TODO: color this (active?) -->
     <h4 class="list-group-item-heading">{{ citation.title }}</h4>
     <p class="list-group-item-text">{{ citation.get_author_list_truncated }} ({{ citation.get_year_published }}). {{ citation.get_journal }}.</p>
   </a>
 
-  {% if citation_is_not_saved %}
-    <div id="citation-item-{{ forloop.counter }}" class="citation-index-all sublinks collapse {% if forloop.counter == 1 %}in{% endif %}"> <!-- start with first entry not collapsed -->
-  {% else %}
-    <div id="citation-item-{{ citation.pk }}" class="citation-index-all sublinks collapse {% if forloop.counter == 1 %}in{% endif %}"> <!-- start with first entry not collapsed -->
-  {% endif %}
-  <a class="list-group-item small">{{ citation.abstract }}</a>
-  {% if citation_is_not_saved %}
+  <div id="citation-item-{{ forloop.counter }}" class="citation-index-all sublinks collapse {% if forloop.counter == 1 %}in{% endif %}"> <!-- start with first entry not collapsed -->
+    <a class="list-group-item small">{{ citation.abstract }}</a>
+    {% if citation_is_not_saved %} <!-- i.e., if we are looking at pubmed import results -->
       {% if citation.preExistingCitationExists %}
         <!-- link to pre-existing citation detail -->
         <a class="list-group-item" href="{% url 'MCCitation:detail' citation.preExistingCitationPk 0 %}">
@@ -38,11 +30,11 @@
           </form>
         </a>
       {% endif %}
-  {% else %}
-    <!-- link to citation detail-->
-    <a class="list-group-item" href="{% url 'MCCitation:detail' citation.pk  0 %}">
-      <button type="button" class="btn btn-primary btn-xs">Click to discuss this paper!</button>
-    </a>
-  {% endif %}
+    {% else %}
+      <!-- link to citation detail-->
+      <a class="list-group-item" href="{% url 'MCCitation:detail' citation.pk  0 %}">
+        <button type="button" class="btn btn-primary btn-xs">Click to discuss this paper!</button>
+      </a>
+    {% endif %}
   </div>
 </div>

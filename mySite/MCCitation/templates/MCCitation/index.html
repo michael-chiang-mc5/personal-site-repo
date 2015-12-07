@@ -1,0 +1,20 @@
+{% extends "MCBase/base.html" %}
+
+{% block title %}
+  List of all citations
+{% endblock %}
+
+
+<!-- webpage main content -->
+{% block body_block %}
+
+  <div class="container">
+    {% for citation in citations %}
+      <div>
+        {% include "MCCitation/pubmedCitation_template.html" %}
+      </div>
+    <br>
+    {% endfor %}
+  </div>
+
+{% endblock %}
