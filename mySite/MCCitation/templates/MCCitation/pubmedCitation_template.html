@@ -29,7 +29,7 @@
           <button type="button" class="btn btn-primary btn-xs">Discuss in JCDB</button>
         </a>
       {% else %}
-        <!-- import citations into JCDB. Form submission handled by javascript in MCJournalclub/import_from_pubmed.js -->
+        <!-- import citations into JCDB. Form submission handled by javascript in MCCitation/import_from_pubmed.js -->
         <a class="list-group-item">
           <button type="button" class="btn btn-primary btn-xs import-button">Import to JCDB</button>
           <form action="{% url 'MCCitation:addCitation' %}" method=POST class="inline">

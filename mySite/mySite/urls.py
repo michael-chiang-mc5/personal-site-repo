@@ -24,5 +24,4 @@ urlpatterns = [
     url('', include('MCHome.urls', namespace='MCHome')),
     url(r'^MCPost/', include('MCPost.urls', namespace='MCPost')),
     url(r'^MCCitation/', include('MCCitation.urls', namespace='MCCitation')),
-    url(r'^MCJournalclub/', include('MCJournalclub.urls', namespace='MCJournalclub')),
 ]

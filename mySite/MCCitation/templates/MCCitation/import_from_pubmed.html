@@ -4,9 +4,9 @@
 {% block javascript %}
   {% load staticfiles %}
   <script>max_results_per_page = {{ results_per_page }}</script>
-  <script src="{% static 'MCJournalclub/js/xml2json.js' %}"></script> <!-- must be called before search.js -->
-  <script src="{% static 'MCJournalclub/js/import_from_pubmed.js' %}"></script>
-  <link rel="stylesheet" href="{% static 'MCJournalclub/css/import_from_pubmed.css' %}">
+  <script src="{% static 'MCCitation/js/xml2json.js' %}"></script> <!-- must be called before search.js -->
+  <script src="{% static 'MCCitation/js/import_from_pubmed.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'MCCitation/css/import_from_pubmed.css' %}">
 {% endblock %}
 
 
