@@ -27,6 +27,7 @@
           <form action="{% url 'MCCitation:addCitation' %}" method=POST class="inline">
             {% csrf_token %}
             <input type="hidden" name="citation_serialized" value="{{ citation.serialize }}" />
+            <!-- <input type="submit" name="submit" class="inline" /> -->
           </form>
         </a>
       {% endif %}

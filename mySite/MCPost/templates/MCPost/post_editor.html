@@ -1,0 +1,44 @@
+{% extends "MCBase/base.html" %}
+
+{% block javascript %}
+  {% load staticfiles %}
+  <script src="{% static 'MCPost/js/ckeditor/ckeditor.js' %}"></script>
+  <script type="text/javascript" src="https://cdn.asdfmathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> <!-- TODO: download this to static -->
+{% endblock %}
+
+{% block body_block %}
+
+  <div id="post-editor-container" class="container height-100">
+    <div id="post-editor-header">
+      {{ header|safe }}
+    </div>
+
+    <div>
+      {% if edit_or_reply == "edit" %}
+        <form role="form" action="{% url 'MCPost:editPost' %}" method=POST>
+      {% elif edit_or_reply == "reply" %}
+        <form role="form" action="{% url 'MCPost:replyPost' %}" method=POST>
+      {% endif %}
+      <!-- POST data -->
+      {% csrf_token %}
+      <input type="hidden" name="next-url" value="{{ next_url }}" />
+      <input type="hidden" name="mother-pk" value="{{ mother.pk }}" />
+
+      <!-- WYSIWYG text editor -->
+      <textarea cols="10" id="editor" name="post-text" rows="10" style="display:none;"></textarea>
+      <script>
+        CKEDITOR.replace( 'editor', {
+          // Set height of editor window
+          height: $("#post-editor-container").height() - $("#post-editor-header").height() - CKEDITOR.config.height - $("#submit-button").height(),
+        });
+        // set initial text
+        CKEDITOR.instances.editor.setData("{{ initial_text|safe }}")
+      </script>
+
+      <!-- submit button -->
+      <button id="submit-button" type="submit" class="btn btn-primary">Submit your post. Don't be afraid, you can always edit your post later!</button>
+    </form>
+  </div>
+  </div>
+
+{% endblock %}

@@ -10,3 +10,11 @@ def get_range( value ):
 @register.filter
 def increment( i ):
   return i+1
+
+# Usage (in template):
+# {% for a,b in first_list|zip_lists:second_list %}
+# {% endfor %}
+
+@register.filter
+def zip_lists(a, b):
+  return zip(a, b)

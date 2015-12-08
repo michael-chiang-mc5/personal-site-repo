@@ -4,12 +4,6 @@ from django.contrib.auth.models import User
 import datetime
 from bson import json_util
 
-class MCThread(models.Model):
-    post = models.ForeignKey(MCPost)
-    order = models.PositiveIntegerField(blank=True, null=True)
-    name = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
 class MCPost(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, blank=True, null=True)
@@ -22,7 +16,7 @@ class MCPost(models.Model):
 
     # Returns post text of the most recent edit
     def __str__(self):
-        return self.get_most_recent_text()
+        return self.text_history
     # This method allows a given user to edit post text. Previous text is saved
     # text: edited post text
     # user_pk: user that is editing the post

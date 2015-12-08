@@ -1,5 +1,71 @@
 {% extends "MCBase/base.html" %}
+{% load MCBase_templatetags %}
 
 {% block title %}
   {{ citation.get_author_list_truncated }}, {{ citation.get_year_published }}
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endblock %}
+
+{% block body_block %}
+  <div class="container">
+
+    <!-- tab bar -->
+    <ul class="nav nav-pills nav-justified">
+      <li data-threadnumber="0" class="thread-switch-button {% if current_thread == 0 %}active{% endif %}"> <a data-toggle="pill" href="#thread_0">Summary</a></li>
+      {% for thread in threads %}
+        <li data-threadnumber="{{ forloop.counter }}" class="thread-switch-button  {% if current_thread == forloop.counter %}active{% endif %}"><a data-toggle="pill" href="#thread_{{ forloop.counter }}">{{ thread.title }}</a></li>
+      {% endfor %}
+      {% if user.is_authenticated %}
+        <li data-threadnumber="{{ threads|length|add:1 }}" class="thread-switch-button  {% if current_thread == threads|length|add:1 %}active{% endif %}"><a data-toggle="pill" href="#thread_{{ threads|length|add:1 }}">Personal notes</a></li>
+      {% endif %}
+    </ul>
+
+    <!-- tab content -->
+    <div class="tab-content">
+      <!-- Content for summary jumbotron -->
+      <div id="thread_0" class="tab-pane fade{% if current_thread == 0 %} in active{% endif %}">
+        <div>
+          <h1 id="summary-title">{{ citation.title }}</h1>
+          <hr />
+          <p id="summary-author">{{ citation.get_author_list }}</p>
+          <p id="summary-source">{{ citation.get_source | safe }} </p>
+          <hr />
+          <p id="summary-abstract"> {{ citation.abstract }} </p>
+          <hr />
+          <!-- pubmed link  -->
+          <a class="btn btn-primary btn-tiny" href="http://www.ncbi.nlm.nih.gov/pubmed/{{ citation.pubmedID }}" role="button">pubmed link &raquo;</a>
+        </div>
+      </div>
+
+      <!-- message boards  (ELI5, methodology, etc) -->
+      {% for thread,post in threads|zip_lists:posts %}
+        <div id="thread_{{ forloop.counter }}" {% if current_thread == forloop.counter %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
+          <div class="message-board-number-comments"><h1> {{ thread.get_number_of_posts }} comments
+            <sup>
+            {% if user.is_authenticated %}
+              <form action="{% url 'MCPost:post_editor' %}" class="inline-block linkButton" method=POST>
+                {% csrf_token %}
+                <input type="hidden" name="edit-or-reply" value="reply" />
+                <input type="hidden" name="next-url" value="{{ request.path }}" />
+                <input type="hidden" name="header" value="<h1>{{ citation.title }}</h1><h2>{{ thread.get_header }}</h2>" />
+                <input type="hidden" name="mother-pk" value="{{ post.pk }}" />
+                <button type="submit" class="linkButton">Add your own comment!</button>
+              </form>
+            {% else %}
+              <a data-toggle="modal" data-target="#social-auth-modal" class="activate-login-modal-library cursor-pointer">Add your own comment!</a>
+            {% endif %}
+            </sup>
+          </div>
+
+        </div>
+      {% endfor %} <!-- end loop over threadsPostsIndents -->
+
+
+    </div> <!-- end div tab-content -->
+
+
+  </div>
 {% endblock %}

@@ -4,6 +4,25 @@ from django.core.urlresolvers import reverse
 from .models import *
 from django.db.models import Q
 
+def post_editor(request):
+    edit_or_reply = request.POST.get("edit-or-reply")
+    header = request.POST.get("header")
+    next_url = request.POST.get("next-url")
+
+    if edit_or_reply=="edit": # TODO: implement
+        pass
+    elif edit_or_reply=="reply": # Note that "adding" a post is technically replying to a base node post
+        initial_text = ''
+        mother_pk = request.POST.get("mother-pk")
+        mother = MCPost.objects.get(pk=mother_pk)
+
+    context={'edit_or_reply':edit_or_reply, \
+             'header':header,'next_url':next_url, \
+             'initial_text':initial_text, \
+             'mother':mother, \
+            }
+    return render(request, 'MCPost/post_editor.html', context)
+
 def index(request):
     posts = MCPost.objects.filter(~Q(node_depth = 0))
     context={'posts':posts,}
@@ -27,6 +46,7 @@ def replyPost(request):
     # get POST variables
     post_text = request.POST.get("post-text")
     mother_pk = int(request.POST.get("mother-pk"))
+    next_url = request.POST.get("next-url")
 
     # create post
     mother = MCPost.objects.get(pk=mother_pk)
@@ -35,7 +55,9 @@ def replyPost(request):
     post.save()
     post.upvoters.add(request.user) # user automatically upvotes his own post
     post.save()
-    return HttpResponse("success")
+
+    # return
+    return HttpResponseRedirect(next_url)
 
 def editPost(request):
     # get POST variables
