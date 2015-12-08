@@ -49,3 +49,6 @@ class MCDiscussionThread(models.Model):
 
     def get_number_of_posts(self):
         return len(MCPost.objects.filter(mother=self.post))
+
+    def get_associated_post_pk(self):
+        return self.post.pk

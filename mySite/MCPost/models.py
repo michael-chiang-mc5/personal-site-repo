@@ -51,3 +51,18 @@ class MCPost(models.Model):
         edits = self.deserialize()
         edit = edits[-1]
         return edit
+
+    def score(self):
+        if self.deleted:
+            return -999999
+        else:
+            return len(self.upvoters.all()) - len(self.downvoters.all())
+
+    # This method returns an unordered list of all children, including self
+    def get_subtree(self):
+        rn = []
+        rn.append(self)
+        for post in MCPost.objects.filter(mother=self):
+            subtree = post.get_subtree()
+            rn = rn + subtree
+        return rn

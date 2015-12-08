@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from .models import *
 from django.db.models import Q
+import pdb
 
 def post_editor(request):
     edit_or_reply = request.POST.get("edit-or-reply")
@@ -75,3 +76,77 @@ def editPost(request):
     post.save()
 
     return HttpResponse("success")
+
+#
+def get_ordered_tree(base_post,exclude_base_post_from_results=True):
+    # get list of all posts in tree
+    posts = base_post.get_subtree()
+
+    # Get children of all posts in tree. childrenIdx_list[i] gives the indices of children of posts[i]
+    childrenIdx_list = [None] * len(posts)
+    for j,post in enumerate(posts):
+        children = post.mcpost_set.all()
+        children_idx = []
+        for child in children:
+            child_idx = None
+            for i,p in enumerate(posts):
+                if child.pk is p.pk:
+                    child_idx = i
+                    break
+            children_idx.append(child_idx)
+        childrenIdx_list[j] = children_idx
+
+    # first element of posts is the base node (see implementation of get_subtree)
+    idx_baseNode = 0
+
+    # get ordered post indices using recursion
+    ordered_indices = get_ordered_tree_recursive(idx_baseNode, posts, childrenIdx_list)
+
+    # get ordered posts
+    ordered_posts = []
+    for i,post in enumerate(ordered_indices):
+        if type(ordered_indices[i]) is str: # ordered_indices[i] is 'in', 'out' representing indent, dedent
+            ordered_posts.append(ordered_indices[i])
+        else:
+            ordered_posts.append(posts[ ordered_indices[i] ])
+
+    if exclude_base_post_from_results:
+        ordered_posts = ordered_posts[2:-1] # exclude first entry (dummy post) along with indents/dedents
+
+    # return ordered posts
+    return ordered_posts
+
+# Returns a list of indices corresponding to an ordered post_list
+# ordered[i] = j means that the jth element of post_list belongs in slot i of ordered list
+# ordered[i] = 'in-*' or 'out-*' is an indent or dedent
+def get_ordered_tree_recursive(node_idx, post_list, childrenIdx_list, withIndents=True):
+    children_indices = childrenIdx_list[node_idx]
+    num_children = len(children_indices)
+
+    if num_children is 0:
+        if withIndents:
+            return ['in-'+str(post_list[node_idx].node_depth),node_idx,'out-'+str(post_list[node_idx].node_depth)]
+        else:
+            return [node_idx]
+    else:
+        # create tuple list [ (aggregateScore, index), ...] which is sorted by aggregateScore
+        tup = [None] * len(children_indices)
+        for i,child_idx in enumerate(children_indices):
+            score = post_list[child_idx].score()
+            tup[i] = (score,child_idx)
+        tup = sorted(tup, reverse=True)
+        if withIndents:
+            ordered = ['in-'+str(post_list[node_idx].node_depth),node_idx]
+        else:
+            ordered = [node_idx]
+        for t in tup:
+            score = t[0]
+            child_idx = t[1]
+            o = get_ordered_tree_recursive(child_idx,post_list,childrenIdx_list,withIndents)
+            if withIndents:
+                ordered = ordered + o
+            else:
+                ordered = ordered + o
+        if withIndents:
+            ordered = ordered + ['out-'+str(post_list[node_idx].node_depth)]
+        return ordered
