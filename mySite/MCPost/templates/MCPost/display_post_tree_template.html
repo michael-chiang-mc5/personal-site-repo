@@ -1,0 +1,19 @@
+{% load MCPost_templatetags %}
+
+{% for post in post_tree %}
+  {% if post|is_indent %}
+    <div class="node-depth-{{ post|get_dent_node_depth }}">
+  {% elif post|is_dedent %}
+    </div>
+  {% else %}
+    {% if post.node_depth > 1 %}
+      <div>
+        {% include "MCPost/display_single_post_template.html" %}
+      </div>
+    {% else %}
+      <div>
+        {% include "MCPost/display_single_post_template.html" %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endfor %}
