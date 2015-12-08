@@ -22,6 +22,7 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')), # for description, see: https://docs.djangoproject.com/en/1.8/topics/auth/default/#using-the-views for description of django.contrib.auth.urls
     url('', include('social.apps.django_app.urls', namespace='social')),
     url('', include('MCHome.urls', namespace='MCHome')),
+    url(r'^MCUser/', include('MCUser.urls', namespace='MCUser')),
     url(r'^MCPost/', include('MCPost.urls', namespace='MCPost')),
     url(r'^MCCitation/', include('MCCitation.urls', namespace='MCCitation')),
     url(r'^MCDiscussCitation/', include('MCDiscussCitation.urls', namespace='MCDiscussCitation')),

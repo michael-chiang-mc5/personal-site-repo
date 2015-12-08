@@ -1,6 +1,7 @@
 from django.db import models
 from MCCitation.models import *
 from MCPost.models import *
+from MCPost.views import *
 
 class MCDiscussion(models.Model):
     citation = models.ForeignKey(MCPubmedCitation)
@@ -52,3 +53,7 @@ class MCDiscussionThread(models.Model):
 
     def get_associated_post_pk(self):
         return self.post.pk
+
+    def get_post_tree(self):
+        post_tree = get_ordered_tree(self.post)
+        return post_tree

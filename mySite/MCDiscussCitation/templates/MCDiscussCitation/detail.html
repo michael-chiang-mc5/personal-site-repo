@@ -41,9 +41,7 @@
       </div>
 
       <!-- message boards  (ELI5, methodology, etc) -->
-
-
-      {% for thread,post,post_tree in zipped %}
+      {% for thread in threads %}
         <div id="thread_{{ forloop.counter }}" {% if current_thread == forloop.counter %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}>
           <div class="message-board-number-comments"><h1> {{ thread.get_number_of_posts }} comments
             <sup>
@@ -62,8 +60,10 @@
             </sup>
           </div>
           <hr>
-          {{ post_tree }}
 
+          {% with thread.get_post_tree as post_tree %}
+            {% include "MCPost/display_post_tree_template.html" %}
+          {% endwith %}
         </div>
       {% endfor %} <!-- end loop over threadsPostsIndents -->
 

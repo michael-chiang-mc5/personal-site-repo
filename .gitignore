@@ -8,4 +8,5 @@ mySite/MCCitation/migrations/
 mySite/MCDiscussCitation/migrations/
 mySite/MCHome/migrations/
 mySite/MCPost/migrations/
+mySite/MCUser/migrations/
 secret_keys_and_passwords.py

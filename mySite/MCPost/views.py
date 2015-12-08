@@ -150,3 +150,9 @@ def get_ordered_tree_recursive(node_idx, post_list, childrenIdx_list, withIndent
         if withIndents:
             ordered = ordered + ['out-'+str(post_list[node_idx].node_depth)]
         return ordered
+
+def deletePost(request):
+    pass
+
+def post_context(request,post_pk):
+    pass
