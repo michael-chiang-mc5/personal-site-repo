@@ -24,6 +24,7 @@ urlpatterns = [
     url('', include('MCHome.urls', namespace='MCHome')),
     url(r'^MCUser/', include('MCUser.urls', namespace='MCUser')),
     url(r'^MCPost/', include('MCPost.urls', namespace='MCPost')),
+    url(r'^MCEditor/', include('MCEditor.urls', namespace='MCEditor')),
     url(r'^MCCitation/', include('MCCitation.urls', namespace='MCCitation')),
     url(r'^MCDiscussCitation/', include('MCDiscussCitation.urls', namespace='MCDiscussCitation')),
 ]

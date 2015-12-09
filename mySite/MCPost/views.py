@@ -5,6 +5,7 @@ from .models import *
 from django.db.models import Q
 import pdb
 from MCBase.views import *
+import MCEditor
 
 def upvote_toggle(request,post_pk):
     post = MCPost.objects.get(pk=post_pk)
@@ -41,24 +42,10 @@ def editPost_editor(request):
     # other template variables
     submit_url = reverse('MCPost:editPost')
     header = request.POST.get("header")
-    initial_text = safe_text(MCPost.objects.get(pk=post_pk).get_most_recent_text())
-    # context
-    context={'submit_url':submit_url, \
-             'serialized_form_data':serialized_form_data, \
-             'header':header, \
-             'initial_text':initial_text, \
-            }
-    # return
-    return render(request, 'MCPost/post_editor.html', context)
-
-
-# TODO: move this to new app
-def safe_text(text):
-    text = text.replace("\r","")
-    text = text.replace("\n","")
-    text = text.replace('"',"'")
-    text = text.replace("\\","\\\\")
-    return text
+    initial_text = MCPost.objects.get(pk=post_pk).get_most_recent_text()
+    # create editor
+    html = MCEditor.views.editor(request,submit_url,serialized_form_data,header,initial_text)
+    return html
 
 def replyPost_editor(request):
     # this is form data that will be submitted to submit_url
@@ -69,14 +56,9 @@ def replyPost_editor(request):
     submit_url = reverse('MCPost:replyPost')
     header = request.POST.get("header")
     initial_text = ''
-    # context
-    context={'submit_url':submit_url, \
-             'serialized_form_data':serialized_form_data, \
-             'header':header, \
-             'initial_text':initial_text, \
-            }
-    # return
-    return render(request, 'MCPost/post_editor.html', context)
+    # create editor
+    html = MCEditor.views.editor(request,submit_url,serialized_form_data,header,initial_text)
+    return html
 
 def index(request):
     posts = MCPost.objects.filter(~Q(node_depth = 0))

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'MCCitation',
     'MCDiscussCitation',
     'MCPost',
+    'MCEditor',
     'MCUser',
     'MCBase',
 ]

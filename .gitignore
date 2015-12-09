@@ -6,6 +6,7 @@ mySite/home/migrations/
 mySite/MCBase/migrations/
 mySite/MCCitation/migrations/
 mySite/MCDiscussCitation/migrations/
+mySite/MCEditor/migrations/
 mySite/MCHome/migrations/
 mySite/MCPost/migrations/
 mySite/MCUser/migrations/
