@@ -14,11 +14,10 @@
       <span><a class="bold comment-user cursor-pointer">unknown user</a></span>
     {% endif %}
     <span>&nbsp;</span>
-
     {% if not post.deleted %}
       <span id="commentscore-pk-{{ post.pk }}" class="comment-score">{{ post.score }}</span><span class="comment-score"> point{{post.score|pluralize}}</span>
       <span class="comment-time" id="comment-time-{{ post.pk }}">
-        {{ post.time|age }}
+        {{ post.get_age }}
       </span>
     {% endif %}
   </div>
@@ -75,7 +74,7 @@
           <a class='submit-next-form'>reply</a> &nbsp;
           <form action="{% url 'MCPost:replyPost_editor' %}" class="inline-block" method=POST>
             {% csrf_token %}
-            <input type="hidden" name="next-url" value="{{ request.path }}" />
+            <input type="hidden" class="editor-redirect-url" name="next-url" value="{{ request.path }}" />
             <input type="hidden" name="header" value="<a>Click to read post you are relying to</a>" />
             <input type="hidden" name="mother-pk" value="{{ post.pk }}" />
           </form>
@@ -89,7 +88,7 @@
             <form action="{% url 'MCPost:editPost_editor' %}" class="inline-block" method=POST>
               {% csrf_token %}
               <input type="hidden" name="post-pk" value="{{ post.pk }}" />
-              <input type="hidden" name="next-url" value="{{ request.path }}" />
+              <input type="hidden" class="editor-redirect-url" name="next-url" value="{{ request.path }}#post-{{post.pk}}" />
               <input type="hidden" name="header" value="<h1>Editing your post</h1>" />
             </form>
           </span>
@@ -136,7 +135,7 @@
                    {% else %}
                      edited
                    {% endif %}
-                   {{ recent_post.2|age }}
+                   {{ recent_post.get_age }}
                  </a></li> <!-- time created/edited -->
                {% endfor %}
              </ul>

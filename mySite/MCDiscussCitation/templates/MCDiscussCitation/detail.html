@@ -28,7 +28,7 @@
 
     <!-- tab content -->
     <div class="tab-content">
-      <!-- Content for summary jumbotron -->
+      <!-- Content for summary  -->
       <div id="thread_0" class="tab-pane fade{% if current_thread == 0 %} in active{% endif %}">
         <div>
           <h1 id="summary-title">{{ citation.title }}</h1>
@@ -49,13 +49,12 @@
           <div class="message-board-number-comments"><h1> {{ thread.get_number_of_posts }} comments
             <sup>
             {% if user.is_authenticated %}
-              <!-- button to add a reply to thread -->
-              <form action="{% url 'MCPost:replyPost_editor' %}" class="inline-block linkButton" method=POST>
+              <a class='submit-next-form'>Add your own comment!</a> &nbsp;
+              <form action="{% url 'MCPost:replyPost_editor' %}" class="inline-block" method=POST>
                 {% csrf_token %}
-                <input type="hidden" name="next-url" value="{{ request.path }}" />
-                <input type="hidden" name="header" value="<h1>{{ citation.title }}</h1><h2>{{ thread.get_header }}</h2>" />
+                <input type="hidden" class="editor-redirect-url" name="next-url" value="{{ request.path }}" />
+                <input type="hidden" name="header" value="<h1>{{ citation.title }}</h1><h2>{{ thread.get_header }}</h2>"/>
                 <input type="hidden" name="mother-pk" value="{{ thread.get_associated_post_pk }}" />
-                <button type="submit" class="linkButton">Add your own comment!</button>
               </form>
             {% else %}
               <a data-toggle="modal" data-target="#social-auth-modal" class="activate-login-modal-library cursor-pointer">Add your own comment!</a>

@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.models import User
 import datetime
 from bson import json_util
+from django.utils.timesince import timesince
 
 class MCPost(models.Model):
     time = models.DateTimeField(auto_now_add=True)
@@ -51,6 +52,16 @@ class MCPost(models.Model):
         edits = self.deserialize()
         edit = edits[-1]
         return edit
+    def get_age(self):
+        now = datetime.datetime.now(datetime.timezone.utc)
+        try:
+            difference = now - self.time
+        except:
+            return "Invalid input"
+        if difference <= datetime.timedelta(minutes=1):
+            return 'just now'
+        return '%(time)s ago' % {'time': timesince(self.time).split(', ')[0]}
+
 
     def score(self):
         if self.deleted:

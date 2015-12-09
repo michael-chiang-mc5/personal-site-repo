@@ -34,7 +34,6 @@ $(document).ready(function() {
       var link = $(this)
       var original_href = link.attr('href')
       var arr = original_href.split('/');
-
       var reconstructed_str = ''
       $.each(arr, function( index, value ) {
         // this is the equivalent of continue if value==''
@@ -50,6 +49,28 @@ $(document).ready(function() {
       reconstructed_str += '/' + threadnumber + '/'
       link.attr('href',reconstructed_str)
     });
+
+    // this changes reply/edit/comment links to go to new thead
+    $('.editor-redirect-url').each(function(index) {
+      var input = $(this)
+      var original_href = input.attr('value')
+      var arr = original_href.split('/');
+      var reconstructed_str = ''
+      $.each(arr, function( index, value ) {
+        // this is the equivalent of continue if value==''
+        if (value == '') {
+          return
+        }
+        // this is the equivalent of break if index exceeds limit
+        if (index > arr.length-3 ) {
+          return false
+        }
+        reconstructed_str += '/' + value
+      });
+      reconstructed_str += '/' + threadnumber + '/'
+      input.attr('value',reconstructed_str)
+    });
+
 
   });
 

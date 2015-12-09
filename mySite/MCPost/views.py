@@ -9,7 +9,6 @@ import MCEditor
 
 def upvote_toggle(request,post_pk):
     post = MCPost.objects.get(pk=post_pk)
-
     # clear upvote if user already upvoted
     if post.upvoters.filter(id=request.user.pk).exists():
         post.upvoters.remove(request.user)
@@ -17,12 +16,10 @@ def upvote_toggle(request,post_pk):
     else:
         post.upvoters.add(request.user)
         post.downvoters.remove(request.user)
-
     return HttpResponse(post.score())
 
 def downvote_toggle(request,post_pk):
     post = MCPost.objects.get(pk=post_pk)
-
     # clear downvote if user already downvoted
     if post.downvoters.filter(id=request.user.pk).exists():
         post.downvoters.remove(request.user)
@@ -30,9 +27,7 @@ def downvote_toggle(request,post_pk):
     else:
         post.downvoters.add(request.user)
         post.upvoters.remove(request.user)
-
     return HttpResponse(post.score())
-
 
 def editPost_editor(request):
     # this is form data that will be submitted to submit_url
@@ -46,6 +41,22 @@ def editPost_editor(request):
     # create editor
     html = MCEditor.views.editor(request,submit_url,serialized_form_data,header,initial_text)
     return html
+def editPost(request):
+    # get POST variables
+    post_text = request.POST.get("post-text")
+    serialized_form_data = request.POST.get("serialized-form-data")
+    form_data = deserialize_json_string(serialized_form_data)
+    post_pk = int(form_data["post_pk"])
+    next_url = form_data["next_url"]
+    # check to make sure user requesting edit is original author or superuser
+    post = MCPost.objects.get(pk=post_pk)
+    original_user_pk = post.user.pk
+    if not request.user.is_superuser and original_user_pk != request.user.pk:
+        return HttpResponse("invalid user requesting edit")
+    # do edit and save
+    post.edit(post_text,request.user.pk)
+    post.save()
+    return HttpResponseRedirect(next_url)
 
 def replyPost_editor(request):
     # this is form data that will be submitted to submit_url
@@ -59,12 +70,32 @@ def replyPost_editor(request):
     # create editor
     html = MCEditor.views.editor(request,submit_url,serialized_form_data,header,initial_text)
     return html
+def replyPost(request,append_anchor=True):
+    # get POST variables
+    post_text = request.POST.get("post-text")
+    serialized_form_data = request.POST.get("serialized-form-data")
+    form_data = deserialize_json_string(serialized_form_data)
+    mother_pk = int(form_data["mother_pk"])
+    next_url = form_data["next_url"]
+    # create post
+    mother = MCPost.objects.get(pk=mother_pk)
+    post = MCPost(user=request.user,mother=mother,node_depth=mother.node_depth+1)
+    post.edit(post_text,request.user.pk)
+    post.save()
+    post.upvoters.add(request.user) # user automatically upvotes his own post
+    post.save()
+    # return
+    if append_anchor:
+        next_url += '#post-' + str(post.pk)
+    return HttpResponseRedirect(next_url)
 
+#TODO: This might not be needed
 def index(request):
     posts = MCPost.objects.filter(~Q(node_depth = 0))
     context={'posts':posts,}
     return render(request, 'MCPost/index.html', context)
 
+# TODO: This might not be needed
 def createPost(request):
     # get POST variables
     post_text = request.POST.get("post-text")
@@ -79,44 +110,9 @@ def createPost(request):
     post.save()
     return HttpResponse("success")
 
-def replyPost(request):
-    # get POST variables
-    post_text = request.POST.get("post-text")
-    serialized_form_data = request.POST.get("serialized-form-data")
-    form_data = deserialize_json_string(serialized_form_data)
-    mother_pk = int(form_data["mother_pk"])
-    next_url = form_data["next_url"]
 
-    # create post
-    mother = MCPost.objects.get(pk=mother_pk)
-    post = MCPost(user=request.user,mother=mother,node_depth=mother.node_depth+1)
-    post.edit(post_text,request.user.pk)
-    post.save()
-    post.upvoters.add(request.user) # user automatically upvotes his own post
-    post.save()
 
-    # return
-    return HttpResponseRedirect(next_url)
 
-def editPost(request):
-    # get POST variables
-    post_text = request.POST.get("post-text")
-    serialized_form_data = request.POST.get("serialized-form-data")
-    form_data = deserialize_json_string(serialized_form_data)
-    post_pk = int(form_data["post_pk"])
-    next_url = form_data["next_url"]
-
-    # check to make sure user requesting edit is original author or superuser
-    post = MCPost.objects.get(pk=post_pk)
-    original_user_pk = post.user.pk
-    if not request.user.is_superuser and original_user_pk != request.user.pk:
-        return HttpResponse("invalid user requesting edit")
-
-    # do edit and save
-    post.edit(post_text,request.user.pk)
-    post.save()
-
-    return HttpResponseRedirect(next_url)
 
 #
 def get_ordered_tree(base_post,exclude_base_post_from_results=True):
