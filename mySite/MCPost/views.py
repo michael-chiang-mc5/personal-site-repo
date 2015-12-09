@@ -19,7 +19,7 @@ def upvote_toggle(request,post_pk):
     return HttpResponse(post.score())
 
 def downvote_toggle(request,post_pk):
-    post = Post.objects.get(pk=post_pk)
+    post = MCPost.objects.get(pk=post_pk)
 
     # clear downvote if user already downvoted
     if post.downvoters.filter(id=request.user.pk).exists():

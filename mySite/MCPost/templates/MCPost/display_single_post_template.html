@@ -3,6 +3,7 @@
 
 {% load staticfiles %}
 <script src="{% static 'MCPost/js/display_single_post_template.js' %}"></script>
+<link rel="stylesheet" href="{% static 'MCPost/css/display_single_post_template.css' %}">
 
 <div id="post-{{ post.pk }}" class="post-wrapper">
   <!-- top bar containing username, points, time posted -->
@@ -43,9 +44,9 @@
         {% if user.is_authenticated %}
           <input type="hidden" name="post_pk" value="{{ post.pk }}">
           {% if post|post_upvoted_by_user:user.pk %}
-            <a postpk="{{ post.pk }}" url="{% url 'MCPost:upvote_toggle' post.pk %}" id="up-{{ post.pk }}" class="upvote-button upvoted-arrow cursor-pointer active-vote" title="This comment is useful" onClick="return false;">upvoted</a>
+            <a postpk="{{ post.pk }}" url="{% url 'MCPost:upvote_toggle' post.pk %}" id="up-{{ post.pk }}" class="upvote-button vote-toggle-on cursor-pointer" title="This comment is useful" onClick="return false;">upvoted</a>
           {% else %}
-            <a postpk="{{ post.pk }}" url="{% url 'MCPost:upvote_toggle' post.pk %}" id="up-{{ post.pk }}" class="upvote-button up-arrow cursor-pointer" title="This comment is useful" onClick="return false;">upvote</a>
+            <a postpk="{{ post.pk }}" url="{% url 'MCPost:upvote_toggle' post.pk %}" id="up-{{ post.pk }}" class="upvote-button vote-toggle-off cursor-pointer" title="This comment is useful" onClick="return false;">upvote</a>
           {% endif %}
         {% else %}
           <a class="activate-login-modal-vote cursor-pointer" data-toggle="modal" data-target="#social-auth-modal" title="This comment is useful">upvote</a>
@@ -58,9 +59,9 @@
         {% if user.is_authenticated %}
           <input type="hidden" name="post_pk" value="{{ post.pk }}">
           {% if post|post_downvoted_by_user:user.pk %}
-            <a id="down-{{ post.pk }}" class="downvote-button downvoted-arrow cursor-pointer active-vote" title="This comment not useful">downvoted</a>
+            <a postpk="{{ post.pk }}" url="{% url 'MCPost:downvote_toggle' post.pk %}" id="down-{{ post.pk }}" class="downvote-button vote-toggle-on cursor-pointer" title="This comment not useful">downvoted</a>
           {% else %}
-            <a id="down-{{ post.pk }}" class="downvote-button down-arrow cursor-pointer" title="This comment not useful">downvote</a>
+            <a postpk="{{ post.pk }}" url="{% url 'MCPost:downvote_toggle' post.pk %}" id="down-{{ post.pk }}" class="downvote-button vote-toggle-off cursor-pointer" title="This comment not useful">downvote</a>
           {% endif %}
         {% else %}
           <a class="activate-login-modal-vote cursor-pointer" data-toggle="modal" data-target="#social-auth-modal" title="This comment is not useful">downvote</a>
