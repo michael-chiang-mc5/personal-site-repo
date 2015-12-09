@@ -1,0 +1,6 @@
+.post-wrapper img {
+   height: auto !important;
+   width: auto !important;
+   max-height: 300px !important;
+   max-width: 300px !important;
+}
