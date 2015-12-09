@@ -29,3 +29,11 @@
 .submit-next-form {
   cursor:pointer;
 }
+
+.color-red {
+  color: red !important;
+}
+
+.color-black {
+  color: black !important;
+}

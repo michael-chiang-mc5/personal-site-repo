@@ -52,15 +52,43 @@ class MCPost(models.Model):
         edits = self.deserialize()
         edit = edits[-1]
         return edit
-    def get_age(self):
+
+    def get_original_age(self):
+        return self.get_age(self.time)
+        
+    @staticmethod
+    def get_age(time):
         now = datetime.datetime.now(datetime.timezone.utc)
         try:
-            difference = now - self.time
+            difference = now - time
         except:
             return "Invalid input"
         if difference <= datetime.timedelta(minutes=1):
             return 'just now'
-        return '%(time)s ago' % {'time': timesince(self.time).split(', ')[0]}
+        return '%(time)s ago' % {'time': timesince(time).split(', ')[0]}
+
+    def get_edit_history(self):
+        tuple_list = self.deserialize()
+        rn = []
+        for count,t in enumerate(tuple_list):
+            entry = ''
+            # did the original post author make the edit?
+            original_user_pk = self.user.pk
+            editing_user_pk = int(t[1])
+            if original_user_pk!=editing_user_pk:
+                editing_user = User.objects.get(pk=editing_user_pk)
+                entry += editing_user.username + ' '
+            # is this an original post or edit?
+            if count==0:
+                entry+='posted '
+            else:
+                entry += 'edited '
+            # get time edited
+            entry += self.get_age(t[2])
+            rn.append(entry)
+        # return
+        return rn
+
 
 
     def score(self):

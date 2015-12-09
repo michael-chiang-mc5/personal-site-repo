@@ -1,3 +1,8 @@
+<!--
+  Template variables:
+    display_history: True if you want to enable user to look through post history
+-->
+
 {% load MCBase_templatetags %}
 {% load MCPost_templatetags %}
 
@@ -17,22 +22,30 @@
     {% if not post.deleted %}
       <span id="commentscore-pk-{{ post.pk }}" class="comment-score">{{ post.score }}</span><span class="comment-score"> point{{post.score|pluralize}}</span>
       <span class="comment-time" id="comment-time-{{ post.pk }}">
-        {{ post.get_age }}
+        {{ post.get_original_age }}
       </span>
     {% endif %}
   </div>
 
   <!-- middle box containing post content. javascript used to switch between edits -->
   <div class="post-middle-box">
-    {% for recent_post in post.deserialize %}
-      <div id="comment-text-{{ post.pk }}-{{ forloop.counter }}" class="comment-text comment-target-all-{{ post.pk }} comment-all {% if forloop.last %} comment-last {% endif %}">
-        {% if not post.deleted %}
-          {{ recent_post.0 | safe}} <!-- text -->
-        {% else %}
-          <p>[[ this post was deleted ]]</p>
-        {% endif %}
-      </div>
-    {% endfor %}
+    {% if display_history %}
+      {% for recent_post in post.deserialize %}
+        <div id="comment-text-{{ post.pk }}-{{ forloop.counter }}" class="comment-text comment-target-all-{{ post.pk }} comment-all {% if forloop.last %} comment-last {% endif %}">
+          {% if not post.deleted %}
+            {{ recent_post.0 | safe}} <!-- text -->
+          {% else %}
+            <p>[[ this post was deleted ]]</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      {% if not post.deleted %}
+        {{ post.get_most_recent_text|safe }}
+      {% else %}
+        <p>[[ this post was deleted ]]</p>
+      {% endif %}
+    {% endif %}
   </div>
 
   {% if not post.deleted %}
@@ -96,17 +109,16 @@
           <!-- delete button -->
           <span>
             <a class='delete-post-button cursor-pointer'>delete</a>
-            <div class='delete-post-are-you-sure color-red inline'>
+            <span class='delete-post-are-you-sure color-red'>
               are you sure?
               <a class='delete-post-yes cursor-pointer'>yes</a>
               <form class="inline-block" action="{% url 'MCPost:deletePost' %}" method=POST>
                 {% csrf_token %}
                 <input type="hidden" name="post_pk" value="{{ post.pk }}" />
               </form>
-
               <a class='delete-post-no cursor-pointer'>no</a>
-            </div>
-            <div class='delete-post-confirmation color-black inline'>deleted</div>
+            </span>
+            <span class='delete-post-confirmation color-black'>deleted</span>
             &nbsp;
           </span>
 
@@ -121,30 +133,24 @@
 
       {% endif %}
       <!-- dropdown to select post history -->
-      <span>
-        <span class="dropdown">
-             <a data-toggle="dropdown" class="dropdown-toggle cursor-pointer">history <b class="caret"></b></a> &nbsp;
-             <ul class="dropdown-menu">
-               {% for recent_post in post.get_undecoded_textTupleVector %}
-                 <li class="cursor-pointer li-dropdown-{{post.pk}} li-dropdown-{{post.pk}}-{{forloop.counter}} {% if forloop.last %} active {% endif %}"><a id="action-{{ post.pk }}-{{ forloop.counter }}" >
-                   {% if recent_post.3 != post.creator.username %}
-                     recent_post.3
-                   {% endif %}
-                   {% if forloop.counter == 1 %}
-                     posted
-                   {% else %}
-                     edited
-                   {% endif %}
-                   {{ recent_post.get_age }}
-                 </a></li> <!-- time created/edited -->
-               {% endfor %}
-             </ul>
-         </span>
-      </span>
-
-      <span>
-        <a href="{% url 'MCPost:post_context' post.pk %}">context</a>
-      </span>
+      {% if display_history %}
+        <span>
+          <span class="dropdown">
+               <a data-toggle="dropdown" class="dropdown-toggle cursor-pointer">history <b class="caret"></b></a> &nbsp;
+               <ul class="dropdown-menu">
+                 {% for history_entry in post.get_edit_history %}
+                  <li class="cursor-pointer li-dropdown-{{post.pk}} li-dropdown-{{post.pk}}-{{forloop.counter}}
+                            {% if forloop.last %} active {% endif %}"
+                  >
+                    <a id="action-{{ post.pk }}-{{ forloop.counter }}" >
+                      {{ history_entry }}
+                    </a>
+                  </li>
+                {% endfor %}
+               </ul>
+           </span>
+        </span>
+      {% endif %}
 
     </div>
   {% endif %}

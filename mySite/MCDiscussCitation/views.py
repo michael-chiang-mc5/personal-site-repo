@@ -23,5 +23,9 @@ def detail(request,citation_pk,current_thread):
     discussion = get_associated_discussion(citation_pk)
     threads = discussion.get_associated_threads()
 
-    context = {'current_thread':int(current_thread),'citation':citation,'threads':threads}
+    context = {'current_thread':int(current_thread), \
+               'citation':citation, \
+               'threads':threads, \
+               'display_history':False, \
+              }
     return render(request, 'MCDiscussCitation/detail.html', context)

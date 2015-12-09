@@ -189,7 +189,12 @@ def get_ordered_tree_recursive(node_idx, post_list, childrenIdx_list, withIndent
         return ordered
 
 def deletePost(request):
-    pass
-
-def post_context(request,post_pk):
-    pass
+    post_pk = request.POST.get("post_pk")
+    post = MCPost.objects.get(pk=post_pk)
+    # make sure that user that is deleting post matches post user
+    if request.user.pk != post.user.pk:
+        return HttpResponse("Invalid user")
+    else:
+        post.deleted = True
+        post.save()
+        return HttpResponse("deleted")
