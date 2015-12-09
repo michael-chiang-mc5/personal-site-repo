@@ -49,9 +49,9 @@
           <div class="message-board-number-comments"><h1> {{ thread.get_number_of_posts }} comments
             <sup>
             {% if user.is_authenticated %}
-              <form action="{% url 'MCPost:post_editor' %}" class="inline-block linkButton" method=POST>
+              <!-- button to add a reply to thread -->
+              <form action="{% url 'MCPost:replyPost_editor' %}" class="inline-block linkButton" method=POST>
                 {% csrf_token %}
-                <input type="hidden" name="edit-or-reply" value="reply" />
                 <input type="hidden" name="next-url" value="{{ request.path }}" />
                 <input type="hidden" name="header" value="<h1>{{ citation.title }}</h1><h2>{{ thread.get_header }}</h2>" />
                 <input type="hidden" name="mother-pk" value="{{ thread.get_associated_post_pk }}" />

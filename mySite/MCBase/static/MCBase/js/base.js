@@ -10,4 +10,8 @@ var isFirstLoad = function(namespace) {
 }
 
 $(document).ready(function() {
+  // submit next form when a hyperlink with class '' is clicked
+  $("a.submit-next-form").click(function() {
+    $( this ).next('form').submit();
+  });
 });

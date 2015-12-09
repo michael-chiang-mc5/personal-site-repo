@@ -25,3 +25,7 @@
 .background-color-yellow {
   background-color: #ffc !important;
 }
+
+.submit-next-form {
+  cursor:pointer;
+}

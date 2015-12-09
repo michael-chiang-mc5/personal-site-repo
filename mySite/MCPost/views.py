@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from .models import *
 from django.db.models import Q
 import pdb
+from MCBase.views import *
 
 def upvote_toggle(request,post_pk):
     post = MCPost.objects.get(pk=post_pk)
@@ -32,24 +33,49 @@ def downvote_toggle(request,post_pk):
     return HttpResponse(post.score())
 
 
-# TODO: move this to new app
-def post_editor(request):
-    edit_or_reply = request.POST.get("edit-or-reply")
-    header = request.POST.get("header")
+def editPost_editor(request):
+    # this is form data that will be submitted to submit_url
+    post_pk = int(request.POST.get("post-pk"))
     next_url = request.POST.get("next-url")
-
-    if edit_or_reply=="edit": # TODO: implement
-        pass
-    elif edit_or_reply=="reply": # Note that "adding" a post is technically replying to a base node post
-        initial_text = ''
-        mother_pk = request.POST.get("mother-pk")
-        mother = MCPost.objects.get(pk=mother_pk)
-
-    context={'edit_or_reply':edit_or_reply, \
-             'header':header,'next_url':next_url, \
+    serialized_form_data = serialize_json({'post_pk':post_pk,'next_url':next_url})
+    # other template variables
+    submit_url = reverse('MCPost:editPost')
+    header = request.POST.get("header")
+    initial_text = safe_text(MCPost.objects.get(pk=post_pk).get_most_recent_text())
+    # context
+    context={'submit_url':submit_url, \
+             'serialized_form_data':serialized_form_data, \
+             'header':header, \
              'initial_text':initial_text, \
-             'mother':mother, \
             }
+    # return
+    return render(request, 'MCPost/post_editor.html', context)
+
+
+# TODO: move this to new app
+def safe_text(text):
+    text = text.replace("\r","")
+    text = text.replace("\n","")
+    text = text.replace('"',"'")
+    text = text.replace("\\","\\\\")
+    return text
+
+def replyPost_editor(request):
+    # this is form data that will be submitted to submit_url
+    mother_pk = request.POST.get("mother-pk")
+    next_url = request.POST.get("next-url")
+    serialized_form_data = serialize_json({'mother_pk':mother_pk,'next_url':next_url})
+    # other template variables
+    submit_url = reverse('MCPost:replyPost')
+    header = request.POST.get("header")
+    initial_text = ''
+    # context
+    context={'submit_url':submit_url, \
+             'serialized_form_data':serialized_form_data, \
+             'header':header, \
+             'initial_text':initial_text, \
+            }
+    # return
     return render(request, 'MCPost/post_editor.html', context)
 
 def index(request):
@@ -74,8 +100,10 @@ def createPost(request):
 def replyPost(request):
     # get POST variables
     post_text = request.POST.get("post-text")
-    mother_pk = int(request.POST.get("mother-pk"))
-    next_url = request.POST.get("next-url")
+    serialized_form_data = request.POST.get("serialized-form-data")
+    form_data = deserialize_json_string(serialized_form_data)
+    mother_pk = int(form_data["mother_pk"])
+    next_url = form_data["next_url"]
 
     # create post
     mother = MCPost.objects.get(pk=mother_pk)
@@ -91,7 +119,10 @@ def replyPost(request):
 def editPost(request):
     # get POST variables
     post_text = request.POST.get("post-text")
-    post_pk = int(request.POST.get("post-pk"))
+    serialized_form_data = request.POST.get("serialized-form-data")
+    form_data = deserialize_json_string(serialized_form_data)
+    post_pk = int(form_data["post_pk"])
+    next_url = form_data["next_url"]
 
     # check to make sure user requesting edit is original author or superuser
     post = MCPost.objects.get(pk=post_pk)
@@ -103,7 +134,7 @@ def editPost(request):
     post.edit(post_text,request.user.pk)
     post.save()
 
-    return HttpResponse("success")
+    return HttpResponseRedirect(next_url)
 
 #
 def get_ordered_tree(base_post,exclude_base_post_from_results=True):
