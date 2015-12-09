@@ -6,7 +6,10 @@
 {% endblock %}
 
 {% block javascript %}
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'MCDiscussCitation/css/detail.css' %}">
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="{% static 'MCDiscussCitation/js/detail.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}

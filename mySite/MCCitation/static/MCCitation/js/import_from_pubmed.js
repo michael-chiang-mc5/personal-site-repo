@@ -59,23 +59,4 @@ $(document).ready(function() {
     });
   });
 
-  // import button functionality
-  $(".import-citation").click(function() {
-    var b = $( this )
-    var f = b.next('form');
-    var url = f.attr( 'action' );
-    if ( b.hasClass('import-citation')) { // this is required because click doesn't detect changes to class
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: f.serialize(),
-        success: function(data) {
-          b.removeClass('import-citation')
-          b.parent().attr("href",data)
-          b.html("Click to discuss this paper!")
-        }
-      });
-    }
-  });
-
 });

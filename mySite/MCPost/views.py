@@ -5,6 +5,34 @@ from .models import *
 from django.db.models import Q
 import pdb
 
+def upvote_toggle(request,post_pk):
+    post = MCPost.objects.get(pk=post_pk)
+
+    # clear upvote if user already upvoted
+    if post.upvoters.filter(id=request.user.pk).exists():
+        post.upvoters.remove(request.user)
+    # upvote if user has not already upvoted
+    else:
+        post.upvoters.add(request.user)
+        post.downvoters.remove(request.user)
+
+    return HttpResponse(post.score())
+
+def downvote_toggle(request,post_pk):
+    post = Post.objects.get(pk=post_pk)
+
+    # clear downvote if user already downvoted
+    if post.downvoters.filter(id=request.user.pk).exists():
+        post.downvoters.remove(request.user)
+    # downvote if user has not already downvoted
+    else:
+        post.downvoters.add(request.user)
+        post.upvoters.remove(request.user)
+
+    return HttpResponse(post.score())
+
+
+# TODO: move this to new app
 def post_editor(request):
     edit_or_reply = request.POST.get("edit-or-reply")
     header = request.POST.get("header")
