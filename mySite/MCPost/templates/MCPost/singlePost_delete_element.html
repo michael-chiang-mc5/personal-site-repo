@@ -1,0 +1,14 @@
+<!-- delete button -->
+<span>
+  <a class='delete-post-button cursor-pointer'>delete</a>
+  <span class='delete-post-are-you-sure color-red'>
+    are you sure?
+    <a class='delete-post-yes cursor-pointer'>yes</a>
+    <form class="hide" action="{% url 'MCPost:deletePost' %}" method=POST>
+      {% csrf_token %}
+      <input type="hidden" name="post_pk" value="{{ post.pk }}" />
+    </form>
+    <a class='delete-post-no cursor-pointer'>no</a>
+  </span>
+  <span class='delete-post-confirmation color-black'>deleted</span>
+</span>

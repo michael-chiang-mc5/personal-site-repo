@@ -1,0 +1,20 @@
+<!-- box containing post content. javascript used to switch between edits -->
+{% if display_history %}
+  {% for recent_post in post.deserialize %}
+    <span id="comment-text-{{ post.pk }}-{{ forloop.counter }}" class="comment-text comment-target-all-{{ post.pk }} comment-all {% if forloop.last %} comment-last {% endif %}">
+      {% if not post.deleted %}
+        {{ recent_post.0 | safe}} <!-- text -->
+      {% else %}
+        <p>[[ this post was deleted ]]</p>
+      {% endif %}
+    </span>
+  {% endfor %}
+{% else %}
+  <span class="comment-text">
+  {% if not post.deleted %}
+      {{ post.get_most_recent_text|safe }}
+  {% else %}
+    <p>[[ this post was deleted ]]</p>
+  {% endif %}
+  </span>
+{% endif %}

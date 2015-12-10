@@ -1,0 +1,11 @@
+<!-- dropdown to select history -->
+ <ul class="dropdown-menu">
+   {% for history_entry in post.get_edit_history %}
+    <li class="cursor-pointer li-dropdown-{{post.pk}} li-dropdown-{{post.pk}}-{{forloop.counter}}
+     {% if forloop.last %} active {% endif %}">
+      <a id="action-{{ post.pk }}-{{ forloop.counter }}" >
+        {{ history_entry }}
+      </a>
+    </li>
+  {% endfor %}
+ </ul>

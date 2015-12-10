@@ -1,0 +1,49 @@
+<!--
+  Template variables:
+    display_history: True if you want to enable user to look through post history
+-->
+
+{% load MCBase_templatetags %}
+{% load MCPost_templatetags %}
+
+{% load staticfiles %}
+<script src="{% static 'MCPost/js/display_single_post_template.js' %}"></script>
+<link rel="stylesheet" href="{% static 'MCPost/css/display_single_post_template.css' %}">
+
+<div id="post-{{ post.pk }}" class="post-wrapper">
+  <!-- top box containing username, points, time posted -->
+  <div>
+    {% include "MCPost/singlePost_topbox_element.html" %}
+  </div>
+
+  <!-- middle box containing post text. This takes care of deleted case -->
+  <div>
+    {% include "MCPost/singlePost_textBox_element.html" %}
+  </div>
+
+  <!-- bottom bar only shown if post is not deleted-->
+  {% if not post.deleted %}
+    <div>
+      <!-- upvote button -->
+      {% include "MCPost/singlePost_upvote_element.html" %}
+      <!-- downvote button -->
+      {% include "MCPost/singlePost_downvote_element.html" %}
+      <!-- reply button -->
+      {% include "MCPost/singlePost_reply_element.html" %}
+      <!-- edit/delete only shown if user created post) -->
+      {% if user.is_authenticated and user.pk == post.user.pk%}
+        {% include "MCPost/singlePost_edit_element.html" %}
+        {% include "MCPost/singlePost_delete_element.html" %}
+      {% endif %}
+      <!-- dropdown to select post history -->
+      {% if display_history %}
+        <span class="dropdown">
+           <a data-toggle="dropdown" class="dropdown-toggle cursor-pointer">
+             history<b class="caret"></b>
+           </a>
+           {% include "MCPost/singlePost_history_element.html" %}
+        </span>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

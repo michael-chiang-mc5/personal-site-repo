@@ -1,0 +1,62 @@
+<!--
+  Template variables:
+    display_history: True if you want to enable user to look through post history
+-->
+
+{% load MCBase_templatetags %}
+{% load MCPost_templatetags %}
+
+{% load staticfiles %}
+<script src="{% static 'MCPost/js/display_single_post_template.js' %}"></script>
+<link rel="stylesheet" href="{% static 'MCPost/css/display_single_post_template.css' %}">
+
+<div id="post-{{ post.pk }}" class="post-wrapper">
+
+  <!-- post text. Takes care of deleted case. class condensed-p causes all p tags to be inline -->
+  <span class="condensed-p">
+    {% include "MCPost/singlePost_textBox_element.html" %}
+  </span>
+
+  <!-- username with dropdown options (only appears if post is not deleteed) -->
+  {% if not post.deleted %}
+    <span>
+      <span>&mdash;</span>
+      <span class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle cursor-pointer">{{ post.user.username }}</a>
+        <ul class="dropdown-menu">
+          <!-- score and time, no selection choice -->
+          <li><a>{% include "MCPost/singlePost_scoreAndTime_element.html" %}</a></li>
+          <!-- upvote -->
+          <li class="divider"></li>
+          <li><a>{% include "MCPost/singlePost_upvote_element.html" %}</a></li>
+          <!-- downvote -->
+          <li><a>{% include "MCPost/singlePost_downvote_element.html" %}</a></li>
+          <li class="divider"></li>
+          <!-- reply -->
+          <li><a>{% include "MCPost/singlePost_reply_element.html" %}</a></li>
+          <!-- edit/delete only shown if user created post) -->
+          {% if user.is_authenticated and user.pk == post.user.pk%}
+            <li><a>{% include "MCPost/singlePost_edit_element.html" %}</a></li>
+            <li><a>{% include "MCPost/singlePost_delete_element.html" %}</a></li>
+          {% endif %}
+
+          <!-- dropdown to select post history -->
+          {% if display_history %}
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+              <a>history</a>
+              {% include "MCPost/singlePost_history_element.html" %}
+            </li>
+          {% endif %}
+
+
+        </ul>
+      </span>
+    </span>
+  {% else %}
+      <span>
+        &mdash; unknown user
+      </span>
+  {% endif %}
+
+</div>

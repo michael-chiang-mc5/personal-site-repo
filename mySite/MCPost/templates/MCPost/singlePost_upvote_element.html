@@ -1,0 +1,14 @@
+{% load MCPost_templatetags %}
+
+<!-- upvote button -->
+<span>
+  {% if user.is_authenticated %}
+    {% if post|post_upvoted_by_user:user.pk %}
+      <a postpk="{{ post.pk }}" url="{% url 'MCPost:upvote_toggle' post.pk %}" id="up-{{ post.pk }}" class="upvote-button vote-toggle-on cursor-pointer" title="This comment is useful" onClick="return false;">upvoted</a>
+    {% else %}
+      <a postpk="{{ post.pk }}" url="{% url 'MCPost:upvote_toggle' post.pk %}" id="up-{{ post.pk }}" class="upvote-button vote-toggle-off cursor-pointer" title="This comment is useful" onClick="return false;">upvote</a>
+    {% endif %}
+  {% else %}
+    <a class="activate-login-modal-vote cursor-pointer" data-toggle="modal" data-target="#social-auth-modal" title="This comment is useful">upvote</a>
+  {% endif %}
+</span>

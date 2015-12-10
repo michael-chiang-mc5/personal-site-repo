@@ -8,11 +8,11 @@
   {% else %}
     {% if post.node_depth > 1 %}
       <div>
-        {% include "MCPost/display_single_post_template.html" %}
+        {% include "MCPost/display_single_post_condensed_template.html" %}
       </div>
     {% else %}
       <div>
-        {% include "MCPost/display_single_post_template.html" %}
+        {% include "MCPost/display_single_post_full_template.html" %}
       </div>
     {% endif %}
   {% endif %}

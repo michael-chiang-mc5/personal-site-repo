@@ -1,0 +1,14 @@
+{% if not post.deleted %}
+  <span>
+    <a class="bold comment-user cursor-pointer" href="{% url 'MCUser:user_profile' post.user.pk %}">{{ post.user.username }}</a>
+  </span>
+  <span id="commentscore-pk-{{ post.pk }}" class="comment-score">{{ post.score }}</span>
+  <span class="comment-score"> point{{post.score|pluralize}}</span>
+  <span class="comment-time" id="comment-time-{{ post.pk }}">
+    {{ post.get_original_age }}
+  </span>
+{% else %}
+  <span>
+    <a class="bold comment-user cursor-pointer">unknown user</a>
+  </span>
+{% endif %}

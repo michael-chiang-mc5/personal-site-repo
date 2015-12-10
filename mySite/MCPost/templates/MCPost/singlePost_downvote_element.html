@@ -1,0 +1,14 @@
+{% load MCPost_templatetags %}
+
+<!-- downvote button -->
+<span>
+  {% if user.is_authenticated %}
+    {% if post|post_downvoted_by_user:user.pk %}
+      <a postpk="{{ post.pk }}" url="{% url 'MCPost:downvote_toggle' post.pk %}" id="down-{{ post.pk }}" class="downvote-button vote-toggle-on cursor-pointer" title="This comment not useful">downvoted</a>
+    {% else %}
+      <a postpk="{{ post.pk }}" url="{% url 'MCPost:downvote_toggle' post.pk %}" id="down-{{ post.pk }}" class="downvote-button vote-toggle-off cursor-pointer" title="This comment not useful">downvote</a>
+    {% endif %}
+  {% else %}
+    <a class="activate-login-modal-vote cursor-pointer" data-toggle="modal" data-target="#social-auth-modal" title="This comment is not useful">downvote</a>
+  {% endif %}
+</span>

@@ -1,0 +1,10 @@
+<!-- edit button -->
+<span>
+  <a class='submit-next-form'>edit</a>
+  <form action="{% url 'MCPost:editPost_editor' %}" class="hide" method=POST>
+    {% csrf_token %}
+    <input type="hidden" name="post-pk" value="{{ post.pk }}" />
+    <input type="hidden" class="editor-redirect-url" name="next-url" value="{{ request.path }}#post-{{post.pk}}" />
+    <input type="hidden" name="header" value="<h1>Editing your post</h1>" />
+  </form>
+</span>

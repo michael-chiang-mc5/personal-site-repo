@@ -26,6 +26,6 @@ def detail(request,citation_pk,current_thread):
     context = {'current_thread':int(current_thread), \
                'citation':citation, \
                'threads':threads, \
-               'display_history':False, \
+               'display_history':True, \
               }
     return render(request, 'MCDiscussCitation/detail.html', context)

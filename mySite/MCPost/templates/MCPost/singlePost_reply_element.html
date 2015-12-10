@@ -1,0 +1,16 @@
+<!-- reply button for posts -->
+{% if user.is_authenticated %}
+  <span>
+    <a class='submit-next-form'>reply</a>
+    <form action="{% url 'MCPost:replyPost_editor' %}" class="hide" method=POST>
+      {% csrf_token %}
+      <input type="hidden" class="editor-redirect-url" name="next-url" value="{{ request.path }}" />
+      <input type="hidden" name="header" value="<a>Click to read post you are relying to</a>" />
+      <input type="hidden" name="mother-pk" value="{{ post.pk }}" />
+    </form>
+  </span>
+{% else %}
+  <span>
+    <a data-toggle="modal" data-target="#social-auth-modal" class="cursor-pointer activate-login-modal-post">reply</a>
+  </span>
+{% endif %}
