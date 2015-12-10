@@ -13,7 +13,7 @@
   </a>
 
   <div id="citation-item-{{ forloop.counter }}" class="citation-index-all sublinks collapse {% if forloop.counter == 1 %}in{% endif %}"> <!-- start with first entry not collapsed -->
-    <a class="list-group-item small">{{ citation.abstract }}</a>
+    <a class="list-group-item small">{{ citation.get_abstract }}</a>
     {% if citation_is_not_saved %} <!-- i.e., if we are looking at pubmed import results -->
       {% if citation.preExistingCitationExists %}
         <!-- link to pre-existing citation detail -->

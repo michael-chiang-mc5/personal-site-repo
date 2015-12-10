@@ -24,6 +24,13 @@ class MCPubmedCitation(models.Model):
         else:
             return "Empty citation"
 
+    def get_abstract(self):
+        abstract = self.eval_field(self.abstract)
+        if type(abstract) is list:
+            return '\n\n'.join(abstract)
+        else:
+            return abstract
+
     # Parses internal data and returns a truncated author list (e.g., 'Chiang et al' )
     def get_author_list_truncated(self):
         authors = self.eval_field(self.authors)
