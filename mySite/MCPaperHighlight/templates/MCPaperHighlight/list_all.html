@@ -1,0 +1,24 @@
+{% extends "MCBase/base.html" %}
+
+{% block title %}
+  Previous paper highlights
+{% endblock %}
+
+{% block javascript %}
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'MCPaperHighlight/css/list_all.css' %}">
+{% endblock %}
+
+
+{% block body_block %}
+
+  {% for citation in citations %}
+    <div>
+      {% include "MCCitation/pubmedCitation_template.html" %}
+    </div>
+    <br>
+  {% endfor %}
+
+
+
+{% endblock %}

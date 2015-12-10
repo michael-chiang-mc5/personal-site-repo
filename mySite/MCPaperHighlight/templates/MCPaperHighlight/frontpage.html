@@ -1,0 +1,47 @@
+{% extends "MCBase/base.html" %}
+
+{% block title %}
+  Paper highlight
+{% endblock %}
+
+{% block javascript %}
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'MCPaperHighlight/css/frontpage.css' %}">
+{% endblock %}
+
+
+{% block body_block %}
+
+
+    <div class="wrap-vert">
+        <div id="paper-highlight-background" class="inner">
+          <div class="wrap">
+            <div class="inner">
+
+              <div id="paper-highlight-text">
+                <h2 class="color-white">Paper Highlight</h2>
+                <h1 class="color-white">{{ citation.title }}</h1>
+                <p class="color-white">{{ citation.get_author_list_truncated }}</p>
+                <p class="color-white">{{ citation.journal }}, {{ citation.get_year_published }}</p>
+                <br>
+                <a href="{% url 'MCDiscussCitation:detail' citation.pk 0 %}">
+                  <button type="button" class="btn btn-primary btn-m">Discuss this paper!</button>
+                </a>
+                <a href="{% url 'MCPaperHighlight:list_all' %}">
+                  <button type="button" class="btn btn-primary btn-m">See past highlights</button>
+                </a>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+{% endblock %}

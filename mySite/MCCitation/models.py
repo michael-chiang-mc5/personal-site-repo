@@ -19,7 +19,10 @@ class MCPubmedCitation(models.Model):
     pubmedID = models.PositiveIntegerField(blank=True,null=True)
 
     def __str__(self):
-        return self.title
+        if self.title:
+            return self.title
+        else:
+            return "Empty citation"
 
     # Parses internal data and returns a truncated author list (e.g., 'Chiang et al' )
     def get_author_list_truncated(self):

@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^MCEditor/', include('MCEditor.urls', namespace='MCEditor')),
     url(r'^MCCitation/', include('MCCitation.urls', namespace='MCCitation')),
     url(r'^MCDiscussCitation/', include('MCDiscussCitation.urls', namespace='MCDiscussCitation')),
+    url(r'^MCPaperHighlight/', include('MCPaperHighlight.urls', namespace='MCPaperHighlight')),
 ]

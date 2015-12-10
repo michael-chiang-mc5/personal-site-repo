@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     'MCHome',
+    'MCPaperHighlight',
     'MCCitation',
     'MCDiscussCitation',
     'MCPost',
