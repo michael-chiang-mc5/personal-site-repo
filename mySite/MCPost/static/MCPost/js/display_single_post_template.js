@@ -109,6 +109,17 @@ $(document).ready(function() {
     });
   });
 
-
+  // this makes toggles stay up even when clicked
+  $('.no-closing-dropdown a').on('click', function (event) {
+    $(this).parent().toggleClass('open');
+  });
+  $('body').on('click', function (e) {
+      if (!$('.no-closing-dropdown').is(e.target)
+          && $('.no-closing-dropdown').has(e.target).length === 0
+          && $('.open').has(e.target).length === 0
+      ) {
+          $('.no-closing-dropdown').removeClass('open');
+      }
+  });
 
 });

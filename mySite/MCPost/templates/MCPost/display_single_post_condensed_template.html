@@ -21,8 +21,8 @@
   {% if not post.deleted %}
     <span>
       <span>&mdash;</span>
-      <span class="dropdown">
-        <a data-toggle="dropdown" class="dropdown-toggle cursor-pointer">{{ post.user.username }}</a>
+      <span class="dropdown no-closing-dropdown">
+        <a class="dropdown-toggle cursor-pointer">{{ post.user.username }}</a>
         <ul class="dropdown-menu">
           <!-- score and time, no selection choice -->
           <li><a>{% include "MCPost/singlePost_scoreAndTime_element.html" %}</a></li>
